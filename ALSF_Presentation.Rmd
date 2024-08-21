@@ -110,7 +110,7 @@ NTA_conc
 ```
 ## Making Box Plots using ggplot2
 
-Finally, the time came: it was time to **make my box plots!!** To do this, I used `ggplot` to create a plot for my NTA size data. I used `geom_boxplot` to add the data to the plot and set the line width. I then used many arguments to make the plots pretty, which can be seen in the code below (examples include 'theme(bw)', `theme()`, and `scale_fill_manual`).
+Finally, the time came: it was time to **make my box plots!!** To do this, I used `ggplot` to create a plot for my NTA size data. I used `geom_boxplot` to add the data to the plot and set the line width. I then used many arguments to make the plots pretty, which can be seen in the code below (examples include `theme(bw)`, `theme()`, and `scale_fill_manual`).
 
 ```{r size box plot}
 #Graphing Size
