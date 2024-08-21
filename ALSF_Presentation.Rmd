@@ -15,6 +15,8 @@ The things I did in this notebook are:
 - Created box plots displaying data of interest
 - Made the box plots look **pretty!**
 
+---
+
 ## Setup Steps
 
 To setup, I started by loading in the packages I needed.
@@ -26,7 +28,7 @@ I continued setup by setting my working directory and paths.
 
 ```{r paths}
 #I assigned the path to my working directory to a variable and then set my wd.
-main_dir <- file.path("~","Documents","repos","ALSF")
+main_dir <- file.path("~","Documents","repos","ALSF_Training")
 setwd(main_dir)
 
 #I assigned the path for my data directory to a variable.
