@@ -1,0 +1,133 @@
+---
+title: "Making Box Plots for AACR Poster"
+author: Jaron Magstadt
+date: August 2024
+output: html_notebook
+---
+
+## Notebook Tasks
+
+The things I did in this notebook are:
+
+- Read in NTA data from canine exosome samples
+- Filtered data to only include relevant conditions/results
+- Generated summary statistics using the `summarize` function
+- Created box plots displaying data of interest
+- Made the box plots look **pretty!**
+
+## Setup Steps
+
+To setup, I started by loading in the packages I needed.
+
+```{r library}
+library(tidyverse)
+```
+I continued setup by setting my working directory and paths.
+
+```{r paths}
+#I assigned the path to my working directory to a variable and then set my wd.
+main_dir <- file.path("~","Documents","repos","ALSF")
+setwd(main_dir)
+
+#I assigned the path for my data directory to a variable.
+data_dir <- file.path(main_dir, "data")
+
+#I set up a directory for my plots to go to
+plots_dir <- file.path(main_dir,"plots")
+fs::dir_create(plots_dir)
+```
+
+## Reading in Data
+
+Next, I read in my data of interest. The data of interest is a data frame containing NTA data from several canine exosome samples. The data was previously saved in a `.csv` format, so I used the `read.csv` function to read in my data.
+
+```{r data read}
+NTA_data <- read_csv(file.path(data_dir, "NTA_concentrations_cleaner.csv"))
+```
+It worked! **YAY!**
+## Viewing Data
+
+Like Stephanie says, **always** look at your data! My data frame isn't terribly large, but still unwieldy, so I will use the `head()`, `summary()`, and `names()` functions to look at my data.
+
+```{r data peek}
+head(NTA_data)
+summary(NTA_data)
+names(NTA_data)
+```
+That's a lot of information! But we don't need all of ithe information in the data frame to do the analyses that I am interested in, so lets do some filtering.
+
+## Filtering and Summarizing Data
+
+There are many types of cancer/controls in the data frame I read into R. I am only interested in `"OSA"` and `"HC"`, so I created a character vector that contained these labels to help with an upcoming step.
+
+```{r groups}
+my_groups <- c("OSA","HC")
+my_groups
+```
+Now that I had a vector containing the names of the conditions I'm interest in, I was able to create a pipeline to create a summary of the average size and concentration of exosomes in the `"OSA"` and `"HC"` conditions. I used the `filter()` function along with the `mygroups` vector to only keep the conditions I was interested in, then used the `summarize` function to make a table of summary statistics.
+
+```{r filtering and summarize}
+NTA_summary <- NTA_data |> 
+  filter(Group %in% my_groups) |> 
+  group_by(Group) |> 
+  summarize(Mean_Size = mean(Size),
+            Std_Dev_Size = sd(Size),
+            Mean_Concentration = mean(Concentration),
+            Std_Dev_Concentration = sd(Concentration)
+  )
+ NTA_summary
+```
+Look at that! I can now see the mean size and concentration, as well as standard deviations, for the `"HC"` and `"OSA"` conditions!
+
+## Making Data Frames to Use With ggplot2
+
+Now it was time time move onto the main objective: **making pretty plots for a poster.**
+
+Well...**almost**...
+
+In order to make plots, I wanted to have more concise data frames that only had the data I was interested in. This wasn't entirely necessary, but I wanted to make sure the data was pulling into the plot correctly, and doing things this way ensured that, at least in my mind. I did this by using the `filter()` function again in a set of two pipelines: one for exosome size and one for exosome concentration.
+```{r more filtering}
+ #Making size table for plot
+ NTA_size <- NTA_data |> 
+   filter(Group %in% my_groups) |> 
+   group_by(Group) |> 
+   select(Size)
+
+ NTA_size   
+```
+
+```{r more filtering 2}
+ #Making concentration table for plot
+ NTA_conc <- NTA_data |> 
+   filter(Group %in% my_groups) |> 
+   group_by(Group) |> 
+   select(Concentration)
+ 
+NTA_conc   
+```
+## Making Box Plots using ggplot2
+
+
+```{r size box plot}
+#Graphing Size
+ NTA_size_bp <- ggplot(
+   NTA_size,
+   aes(
+     x = Group,
+     y = Size,
+     fill = Group,
+     )
+ )+ geom_boxplot(lwd = 1, fatten=1) +
+   theme_bw() +
+   theme(plot.title = element_text(size = 14, face = "bold", hjust=0.5)) +
+   scale_fill_manual(values=c("#8a0a25", "#f7ba4d")) +
+   labs(
+     x = "Condition",
+     y = "Size",
+     title = "Exosome Size in Healthy Control vs. Osteosarcoma"
+   )
+ 
+ NTA_size_bp
+```
+
+
