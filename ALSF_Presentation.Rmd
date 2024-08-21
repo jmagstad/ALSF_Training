@@ -129,5 +129,31 @@ NTA_conc
  
  NTA_size_bp
 ```
+And then I did the same thing, but for the `NTA_conc` data frame to create a plot displaying exosome concentration between conditions.
 
+```{r concentration box plot}
+ #Graphing Concentration
+ NTA_conc_bp <- ggplot(
+   NTA_conc,
+   aes(
+     x = Group,
+     y = Concentration,
+     fill = Group
+   )
+ )+ geom_boxplot(lwd = 1, fatten=1) +
+   theme_bw() +
+   theme(plot.title = element_text(size = 14, face = "bold", hjust=0.5)) +
+   scale_fill_manual(values=c("#8a0a25", "#f7ba4d")) +
+   labs(
+     x = "Condition",
+     y = "Concentration",
+     title = "Exosome Concentration in Healthy Control vs. Osteosarcoma"
+   )
 
+NTA_conc_bp
+```
+There is an outlier that makes this box plot a little funny, but that outlier is important to the data, so I decided to keep it.
+
+## Conclusion
+
+Thank you for taking the time to read through my process of creating box plots from exosome NTA data. I hope you enjoyed it!
