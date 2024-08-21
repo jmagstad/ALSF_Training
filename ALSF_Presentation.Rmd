@@ -47,6 +47,7 @@ Next, I read in my data of interest. The data of interest is a data frame contai
 NTA_data <- read_csv(file.path(data_dir, "NTA_concentrations_cleaner.csv"))
 ```
 It worked! **YAY!**
+
 ## Viewing Data
 
 Like Stephanie says, **always** look at your data! My data frame isn't terribly large, but still unwieldy, so I will use the `head()`, `summary()`, and `names()` functions to look at my data.
@@ -56,7 +57,7 @@ head(NTA_data)
 summary(NTA_data)
 names(NTA_data)
 ```
-That's a lot of information! But we don't need all of ithe information in the data frame to do the analyses that I am interested in, so lets do some filtering.
+That's a lot of information! But we don't need all of the information in the data frame to do the analyses that I am interested in, so lets do some filtering.
 
 ## Filtering and Summarizing Data
 
@@ -109,6 +110,7 @@ NTA_conc
 ```
 ## Making Box Plots using ggplot2
 
+Finally, the time came: it was time to **make my box plots!!** To do this, I used `ggplot` to create a plot for my NTA size data. I used `geom_boxplot` to add the data to the plot and set the line width. I then used many arguments to make the plots pretty, which can be seen in the code below (examples include 'theme(bw)', `theme()`, and `scale_fill_manual`).
 
 ```{r size box plot}
 #Graphing Size
@@ -155,6 +157,27 @@ And then I did the same thing, but for the `NTA_conc` data frame to create a plo
 NTA_conc_bp
 ```
 There is an outlier that makes this box plot a little funny, but that outlier is important to the data, so I decided to keep it.
+
+## Saving the Box Plots
+
+As my very last step, I saved my plots. I used `ggsave` to do this. Within the function, I set the file name within the directory for plots I made at the beginning and set the size I wanted for the plots. 
+
+```{r saving box plots}
+ ggsave( #Saving size plot
+   plot = NTA_size_bp,
+   filename = file.path(plots_dir,"NTA_size_bp.png"),
+   width = 6,
+   height = 6
+ )
+ 
+ ggsave( #Saving concentration plot
+   plot = NTA_conc_bp,
+   filename = file.path(plots_dir,"NTA_conc_bp.png"),
+   width = 6,
+   height = 6
+ )
+```
+
 
 ## Conclusion
 
